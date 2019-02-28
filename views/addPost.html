@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <link href="/css/blog.css" rel="stylesheet" />
+    <title>Add post</title>
+  </head>
+
+  <body>
+      <div class="container">
+    <% include partials/_navbar.html %>
+    <h1 style="margin-bottom: 10%; margin-top: 10px" id="title">
+      Create a new Post
+    </h1>
+    <form action="/addPost" method="POST">
+      <div class="container">
+        <div class="row">
+            <div class="col-sm">
+          <label style="display: block;" for="title">Title: </label>
+          <textarea style="padding-right: 60%" name="title"></textarea>
+        </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-sm">
+          <label style="display: block;" for="author">Author: </label>
+          <textarea style="padding-right: 60%"   name="author" > </textarea>
+          </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-sm">
+          <label style="display: block;" for="post">Post: </label>
+          <textarea style="padding-right: 60%; resize: both; overflow: auto " name="post"></textarea>
+          </div>
+        </div>
+        <br />
+        <button type="submit">Create new Post</button>
+      </div>
+    </form>
+  </body>
+</div>
+</html>
