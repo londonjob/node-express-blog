@@ -46,6 +46,12 @@ app.post("/addPost", (req, res) => {
     });
 });
 
+app.get("/editPost/:id", (req, res) => {
+  Blog.find({}, (err, posts) => {
+    res.render("editPost", { posts: posts });
+  });
+});
+
 app.listen(3000, () => {
   console.log("Server running on port 3000");
 });
