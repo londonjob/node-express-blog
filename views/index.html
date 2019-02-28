@@ -14,11 +14,12 @@
     <title>Blog</title>
   </head>
   <body>
+    
         <div class="container">
     <% include partials/_navbar.html %>
-   
+    <h1 style="margin-top: 10px; margin-bottom: 10px">A simple CRUD blog</h1>
       <ul class="list-group" id="Blog">
-       
+         <% if (posts.length >0) {%>
           <% for(let i = 0; i < posts.length; i++) { %>
             <li class="list-group-item">
           <div>
@@ -49,6 +50,11 @@
           >
         </li>
         <% } %>
+        <% }  else {%>
+
+          <h6 style="margin-top: 10%">There are no Post yet. Click 'Create new Post' for your first blog post </h6>
+
+          <% } %>
       </ul>
     </div>
   </body>
