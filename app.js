@@ -1,7 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
-const ObjectId = require("mongodb").ObjectId;
+const ObjectID = require("mongodb").ObjectID;
 
 mongoose.connect("mongodb://test:test123@ds063178.mlab.com:63178/londonjob", {
   useNewUrlParser: true
@@ -51,30 +51,38 @@ app.post("/addPost", (req, res) => {
     });
 });
 
-app.get("/editPost/:_id", (req, res) => {
-  Blog.find({ _id: req.params.id }, (err, post) => {
+app.put("/editPost/:id", (req, res) => {
+  let id = ObjectID(req.params.id);
+  Blog.find(id, (err, result) => {
+    res.send(result);
+  });
+
+  //res.render("editPost", { post: post });
+});
+
+app.get("/editPost/:id", (req, res) => {
+  let id = ObjectID(req.params.id);
+  Blog.find(id, (err, post) => {
     res.render("editPost", { post: post });
-    console.log(post.title);
   });
 });
+
+//app.get("/editPost/:_id", (req, res) => {
+//  Blog.find({ _id: req.params.id }, (err, post) => {
+//    res.render("editPost", { post: post });
+//  });
+// });
 
 app.delete("/delete/:id", (req, res) => {
-  Blog.findOneAndDelete({ _id: req.params.id }, (err, result) => {
-    if (err) return res.send(500, err);
-    res.send({ message: "Post deleted" });
-  });
-});
+  let id = ObjectID(req.params.id);
+  Blog.deleteOne({ _id: id }, (err, result) => {
+    if (err) {
+      throw err;
+    }
 
-app.put("/editPost/:id", (req, res) => {
-  Blog.findByIdAndUpdate(req.params.id, { $set: req.body }, function(
-    err,
-    data
-  ) {
-    if (err) return next(err);
-    res.send("Data udpated.");
-  });
+    res.send("data deleted");
+  }).then(res.redirect("/"));
 });
-
 app.listen(3000, () => {
   console.log("Server running on port 3000");
 });
