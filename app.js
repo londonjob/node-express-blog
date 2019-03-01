@@ -34,7 +34,7 @@ var Blog = mongoose.model("Blog", blogSchema);
 app.get("/", (req, res) => {
   Blog.find({}, (err, posts) => {
     res.render("index", { posts: posts });
-  });
+  }).sort({ createdAt: "descending" });
 });
 
 app.get("/addPost", (req, res) => res.render("addPost"));
@@ -51,13 +51,38 @@ app.post("/addPost", (req, res) => {
     });
 });
 
-app.put("/editPost/:id", (req, res) => {
+app.put("/editPost/:id/update", (req, res) => {
   let id = ObjectID(req.params.id);
-  Blog.find(id, (err, result) => {
-    res.send(result);
-  });
 
-  //res.render("editPost", { post: post });
+  Blog.update(
+    { _id: id },
+    {
+      $set: {
+        title: req.body.title,
+        author: req.body.author,
+        post: req.body.post
+      }
+    }
+  ).then(result => {
+    res.redirect("/"), res.render("editPost");
+  });
+});
+
+app.get("/editPost/:id/update", (req, res) => {
+  let id = ObjectID(req.params.id);
+
+  Blog.update(
+    { _id: id },
+    {
+      $set: {
+        title: req.body.title,
+        author: req.body.author,
+        post: req.body.post
+      }
+    }
+  ).then(result => {
+    res.redirect("/"), res.render("editPost");
+  });
 });
 
 app.get("/editPost/:id", (req, res) => {
@@ -66,23 +91,20 @@ app.get("/editPost/:id", (req, res) => {
     res.render("editPost", { post: post });
   });
 });
-
-//app.get("/editPost/:_id", (req, res) => {
-//  Blog.find({ _id: req.params.id }, (err, post) => {
-//    res.render("editPost", { post: post });
-//  });
-// });
-
 app.delete("/delete/:id", (req, res) => {
   let id = ObjectID(req.params.id);
-  Blog.deleteOne({ _id: id }, (err, result) => {
-    if (err) {
-      throw err;
-    }
-
-    res.send("data deleted");
-  }).then(res.redirect("/"));
+  Blog.findByIdAndRemove(id)
+    .then(() => res.sendStatus(200), res.redirect("/"))
+    .catch(next);
 });
+
+app.get("/delete/:id", (req, res) => {
+  let id = ObjectID(req.params.id);
+  Blog.findByIdAndRemove(id)
+    .then(() => res.sendStatus(200), res.redirect("/"))
+    .catch(next);
+});
+
 app.listen(3000, () => {
   console.log("Server running on port 3000");
 });
