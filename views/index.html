@@ -27,7 +27,7 @@
               <%= posts[i].title %>
             </h3>
             <h6>
-              from <%= posts[i].author %>
+              from <%= posts[i].author %> created at: <%= posts[i].createdAt.toDateString() %>
             </h6>
           </div>
         </br>
@@ -37,13 +37,13 @@
           
 
           <a
-            href="/delete/{{ posts.id }}"
+            href="/delete/<%=posts[i]._id %>"
             class="btn btn-danger btn-xs"
             style="float: right; margin-left: 10px"
             >Delete</a
           >
           <a
-            href="/editPost/{{posts[i]._id}}"
+            href="/editPost/<%=posts[i]._id %>"
             class="btn btn-danger btn-xs"
             style="float: right;"
             >Edit</a

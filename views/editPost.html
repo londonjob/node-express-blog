@@ -20,26 +20,26 @@
       <h1 style="margin-bottom: 10%; margin-top: 10px" id="title">
         Please edit this Post
       </h1>
-      <form action="/editPost" method="PUT">
+      <form action="/editPost/:id" method="GET">
         <div class="container">
           <div class="row">
               <div class="col-sm">
-            <label style="display: block;" for="title">Title: </label>
-            <textarea style="padding-right: 60%" name="title"></textarea>
+            <label style="display: block;" for="post.title">Title: </label>
+            <textarea style="padding-right: 60%" name="title"><%=post.title %></textarea>
           </div>
           </div>
           <br />
           <div class="row">
               <div class="col-sm">
-            <label style="display: block;" for="author">Author: </label>
-            <textarea style="padding-right: 60%"   name="author" > </textarea>
+            <label style="display: block;" for="post.author">Author: </label>
+            <textarea style="padding-right: 60%"   name="author" ><%=post.author %> </textarea>
             </div>
           </div>
           <br />
           <div class="row">
               <div class="col-sm">
-            <label style="display: block;" for="post">Post: </label>
-            <textarea style="padding-right: 60%; resize: both; overflow: auto " name="post"></textarea>
+            <label style="display: block;" for="post.post">Post: </label>
+            <textarea style="padding-right: 60%; resize: both; overflow: auto " name="post"><%=post.post %></textarea>
             </div>
           </div>
           <br />

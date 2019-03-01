@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+const ObjectId = require("mongodb").ObjectId;
 
 mongoose.connect("mongodb://test:test123@ds063178.mlab.com:63178/londonjob", {
   useNewUrlParser: true
@@ -19,7 +20,11 @@ app.use(express.static("css"));
 var blogSchema = mongoose.Schema({
   title: String,
   post: String,
-  author: String
+  author: String,
+  createdAt: {
+    type: Date,
+    default: new Date()
+  }
 });
 
 var Blog = mongoose.model("Blog", blogSchema);
@@ -46,9 +51,27 @@ app.post("/addPost", (req, res) => {
     });
 });
 
-app.get("/editPost/:id", (req, res) => {
-  Blog.find({}, (err, posts) => {
-    res.render("editPost", { posts: posts });
+app.get("/editPost/:_id", (req, res) => {
+  Blog.find({ _id: req.params.id }, (err, post) => {
+    res.render("editPost", { post: post });
+    console.log(post.title);
+  });
+});
+
+app.delete("/delete/:id", (req, res) => {
+  Blog.findOneAndDelete({ _id: req.params.id }, (err, result) => {
+    if (err) return res.send(500, err);
+    res.send({ message: "Post deleted" });
+  });
+});
+
+app.put("/editPost/:id", (req, res) => {
+  Blog.findByIdAndUpdate(req.params.id, { $set: req.body }, function(
+    err,
+    data
+  ) {
+    if (err) return next(err);
+    res.send("Data udpated.");
   });
 });
 
