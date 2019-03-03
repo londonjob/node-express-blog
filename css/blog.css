@@ -4,9 +4,6 @@ label {
   width: 250px;
   text-align: right;
 }
-input {
-  float: left;
-}
 
 body {
   background-color: green;

@@ -51,46 +51,41 @@ app.post("/addPost", (req, res) => {
     });
 });
 
-app.put("/editPost/:id/update", (req, res) => {
-  let id = ObjectID(req.params.id);
-
-  Blog.update(
-    { _id: id },
-    {
-      $set: {
-        title: req.body.title,
-        author: req.body.author,
-        post: req.body.post
-      }
-    }
-  ).then(result => {
-    res.redirect("/"), res.render("editPost");
-  });
-});
-
-app.get("/editPost/:id/update", (req, res) => {
-  let id = ObjectID(req.params.id);
-
-  Blog.update(
-    { _id: id },
-    {
-      $set: {
-        title: req.body.title,
-        author: req.body.author,
-        post: req.body.post
-      }
-    }
-  ).then(result => {
-    res.redirect("/"), res.render("editPost");
-  });
-});
+// Post updaten
 
 app.get("/editPost/:id", (req, res) => {
   let id = ObjectID(req.params.id);
+  console.log(id);
+
   Blog.find(id, (err, post) => {
     res.render("editPost", { post: post });
   });
 });
+
+app.put("/editPost/:id", (req, res) => {
+  let id = ObjectID(req.params.id);
+
+  Blog.findOneAndUpdate(
+    { _id: id },
+    {
+      $set: {
+        title: req.body.title,
+        author: req.body.author,
+        post: req.body.post
+      }
+    },
+    { new: true },
+    (err, result) => {
+      if (err) {
+        return res.send(err);
+      }
+      res.send(result);
+    }
+  );
+});
+
+// Post löschen
+
 app.delete("/delete/:id", (req, res) => {
   let id = ObjectID(req.params.id);
   Blog.findByIdAndRemove(id)
