@@ -8,8 +8,13 @@ mongoose.connect("mongodb://test:test123@ds063178.mlab.com:63178/londonjob", {
 });
 
 var app = express();
+
+app.use(
+  bodyParser.urlencoded({
+    extended: true
+  })
+);
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 
 app.engine("html", require("ejs").renderFile);
 app.set("view engine", "html");
@@ -41,6 +46,7 @@ app.get("/addPost", (req, res) => res.render("addPost"));
 
 app.post("/addPost", (req, res) => {
   var blogData = new Blog(req.body);
+
   blogData
     .save()
     .then(result => {
@@ -54,36 +60,25 @@ app.post("/addPost", (req, res) => {
 // Post updaten
 
 app.get("/editPost/:id", (req, res) => {
-  let id = ObjectID(req.params.id);
-  console.log(id);
+  let id = req.params.id;
 
-  Blog.find(id, (err, post) => {
-    res.render("editPost", { post: post });
+  Blog.findById(id, (err, posts) => {
+    res.render("editPost", { posts: posts });
   });
 });
 
-app.put("/editPost/:id", (req, res) => {
-  let id = ObjectID(req.params.id);
+app.post("/editPost/:id", (req, res) => {
+  let id = req.params.id;
+  console.log(id);
 
-  Blog.findOneAndUpdate(
-    { _id: id },
-    {
-      $set: {
-        title: req.body.title,
-        author: req.body.author,
-        post: req.body.post
-      }
-    },
-    { new: true },
-    (err, result) => {
-      if (err) {
-        return res.send(err);
-      }
-      res.send(result);
+  Blog.findOneAndUpdate(id, req.body, { new: true }, (err, post) => {
+    if (!err) {
+      res.redirect("/");
+    } else {
+      res.send("Error updating data");
     }
-  );
+  });
 });
-
 // Post löschen
 
 app.delete("/delete/:id", (req, res) => {
