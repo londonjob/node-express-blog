@@ -39,7 +39,7 @@ var Blog = mongoose.model("Blog", blogSchema);
 app.get("/", (req, res) => {
   Blog.find({}, (err, posts) => {
     res.render("index", { posts: posts });
-  }).sort({ createdAt: "descending" });
+  });
 });
 
 app.get("/addPost", (req, res) => res.render("addPost"));
@@ -59,17 +59,8 @@ app.post("/addPost", (req, res) => {
 
 // Post updaten
 
-app.get("/editPost/:id", (req, res) => {
-  let id = req.params.id;
-
-  Blog.findById(id, (err, posts) => {
-    res.render("editPost", { posts: posts });
-  });
-});
-
 app.post("/editPost/:id", (req, res) => {
   let id = req.params.id;
-  console.log(id);
 
   Blog.findOneAndUpdate(id, req.body, { new: true }, (err, post) => {
     if (!err) {
@@ -77,6 +68,14 @@ app.post("/editPost/:id", (req, res) => {
     } else {
       res.send("Error updating data");
     }
+  });
+});
+
+app.get("/editPost/:id", (req, res) => {
+  let id = req.params.id;
+
+  Blog.findById(id, (err, posts) => {
+    res.render("editPost", { posts: posts });
   });
 });
 // Post löschen
